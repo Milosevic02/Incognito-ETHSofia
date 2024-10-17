@@ -14,20 +14,18 @@ function getTransactions(address) {
     fetch(url, options)
       .then(response => response.json())
       .then(data => {
-        let numOfTransaction = 0;
-
+        let lastTransaction;
         for (let i = 0; i < data.data.length; i++) {
           const token = data.data[i];
-          console.log(token);
-
           if (token.from_address === address) {
+            lastTransaction = token;
             numOfTransaction = token.nonce;
             break;
           }
         }
 
         console.log(`Number of transaction: ${numOfTransaction}`);
-        console.log(`Last transaction: ${data.data[0].block_timestamp}`);
+        console.log(`Last transaction: ${lastTransaction.block_timestamp}`);
       })
       .catch(error => console.error('Error fetching transactions:', error));
   }

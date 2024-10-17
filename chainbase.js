@@ -38,7 +38,6 @@ function getTransactions(address) {
         }
       };
 
-
       const url = 'https://api.chainbase.online/v1/account/txs?chain_id=1&address=0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7&limit=100&page=10';
       fetch(url, options)
         .then(response => response.json())
@@ -67,7 +66,7 @@ function getTransactions(address) {
       }
     };
   
-    const url = `https://api.chainbase.online/v1/account/tokens?chain_id=1&address=${address}`;
+    const url = `https://api.chainbase.online/v1/account/tokens?chain_id=1&address=${address}&limit=100`;
   
     fetch(url, options)
         .then(response => response.json())
@@ -88,7 +87,7 @@ function getTransactions(address) {
     }
   
   const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
-  getTransactions(address);
-  //getAccBalance(address);
+  //getTransactions(address);
+  getAccBalance(address);
   //getFirstTransaction(address);
   

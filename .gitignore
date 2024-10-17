@@ -1,2 +1,3 @@
-mail/node_modules
-mail/.env
+backend/node_modules
+backend/.env
+node_modules

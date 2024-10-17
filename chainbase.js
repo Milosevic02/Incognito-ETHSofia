@@ -83,7 +83,7 @@ function getTransactions(address) {
         .catch(error => console.error('Error fetching token balance:', error));
     }
 
-    async function getNFTBalance(address) {
+    async function getNFTs(address) {
       const options = {
         method: 'GET',
         headers: {
@@ -121,9 +121,35 @@ function getTransactions(address) {
           console.error('Error fetching NFT balance:', error);
       }
   }
-  
+
+  function getNativeBalance(address) {
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-api-key': '2nZ3CN35HkCaXFfu9S4ukwVjW6t'
+        }
+    };
+
+    const url = `https://api.chainbase.online/v1/account/balance?chain_id=1&address=${address}`;
+
+    fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.data) {
+            const weiBalance = parseInt(data.data, 16);
+            const etherBalance = weiBalance / 1e18; 
+            console.log(`Native balance: ${etherBalance} ETH`);
+
+        } else {
+            console.log('Error fetching balance or invalid data format.');
+        }
+        })
+        .catch(error => console.error('Error fetching native balance:', error));
+}
+
   
   const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
   //getTransactions(address);
   //getAccBalance(address); 
-  getNFTBalance(address); 
+  //getNFTs(address); 
+  getNativeBalance(address);

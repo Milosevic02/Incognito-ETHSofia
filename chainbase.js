@@ -1,5 +1,6 @@
 var numOfTransaction = 0;
 var lastPage = 1;
+
 function getTransactions(address) {
     const options = {
       method: 'GET',
@@ -81,7 +82,48 @@ function getTransactions(address) {
         })
         .catch(error => console.error('Error fetching token balance:', error));
     }
+
+    async function getNFTBalance(address) {
+      const options = {
+        method: 'GET',
+        headers: {
+          'x-api-key': '2nZ3CN35HkCaXFfu9S4ukwVjW6t'
+        }
+      };
+  
+      let url = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100`;
+  
+      try {
+          const initialResponse = await fetch(url, options);
+          const initialData = await initialResponse.json();
+  
+          let NFTs = [];
+          NFTs.push(...initialData.data.map(token => token.contract_address));
+  
+          const totalPages = Math.ceil(initialData.count / 100);
+  
+          if (totalPages > 1) {
+              const fetchPromises = [];
+              for (let i = 2; i <= totalPages; i++) {
+                  const pageUrl = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100&page=${i}`;
+                  fetchPromises.push(fetch(pageUrl, options).then(response => response.json()));
+              }
+  
+              const pagesData = await Promise.all(fetchPromises);
+  
+              pagesData.forEach(page => {
+                  NFTs.push(...page.data.map(token => token.contract_address));
+              });
+          }
+  
+          console.log(`Total NFTs: ${NFTs.length}`);
+      } catch (error) {
+          console.error('Error fetching NFT balance:', error);
+      }
+  }
+  
   
   const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
-  getTransactions(address);
-  //getAccBalance(address);  
+  //getTransactions(address);
+  //getAccBalance(address); 
+  getNFTBalance(address); 

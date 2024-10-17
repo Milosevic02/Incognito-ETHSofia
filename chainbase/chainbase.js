@@ -210,7 +210,7 @@ async function registerUser(address) {
         };
 
         const fs = require('fs');
-        const jsonFileName = `${address}.json`;
+        const jsonFileName = 'userData.json';
         fs.writeFileSync(jsonFileName, JSON.stringify(userData, null, 2));
         console.log(`User data saved to ${jsonFileName}`);
     } catch (error) {

@@ -6,7 +6,6 @@ import DefaultLayout from "@/layouts/default";
 import { useRouter } from 'next/router';
 import { IExecWeb3mail } from '@iexec/web3mail';
 import { IExecDataProtector } from '@iexec/dataprotector';
-import { type GrantAccessParams } from '@iexec/dataprotector';
 import { WEB3MAIL_IDAPPS_WHITELIST_SC } from '@/utils/authConfig';
 
 const varname = "Email Address";

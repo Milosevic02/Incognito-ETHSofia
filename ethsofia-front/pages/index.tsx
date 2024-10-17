@@ -44,15 +44,29 @@ export default function DocsPage() {
       setProtectedData(protectedEmail);
       // Save the protected email to a global variable
       window.protectedEmail = protectedEmail;
+
       // Grant access after protecting the email
-      const grantedAccess = await dataProtectorCore.grantAccess({
+      await dataProtectorCore.grantAccess({
         protectedData: protectedEmail.address,
         authorizedApp: WEB3MAIL_IDAPPS_WHITELIST_SC.app,
         authorizedUser: WEB3MAIL_IDAPPS_WHITELIST_SC.user,
         numberOfAccess: 99999,
       });
 
-      useRetrieveData(window.ethereum)
+      // Send the protected email address to the backend
+      const response = await fetch('http://localhost:8000/retrieve-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: protectedEmail.address }),
+      });
+
+      if (response.ok) {
+        console.log("Users data retrieved successfully");
+      } else {
+        console.error("Failed to retrieve users data");
+      }
       router.push('/home');
     } catch (error) {
       console.error("Error protecting email data:", error);

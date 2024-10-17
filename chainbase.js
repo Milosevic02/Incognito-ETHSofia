@@ -1,3 +1,6 @@
+var numOfTransaction = 0;
+var page = 1;
+
 function getTransactions(address) {
     const options = {
       method: 'GET',
@@ -6,33 +9,59 @@ function getTransactions(address) {
       }
     };
   
-    const url = `https://api.chainbase.online/v1/account/txs?address=${address}&chain_id=1`;
+    const url = `https://api.chainbase.online/v1/account/txs?address=${address}&chain_id=1&limit=100`;
   
     fetch(url, options)
       .then(response => response.json())
       .then(data => {
-        console.log('Transactions Data:');
-        
-        // Check if transactions exist
-        if (data && data.data && data.data.length > 0) {
-          data.data.forEach((tx, index) => {
-            // Extract only the most important information
-            console.log(`Transaction #${index + 1}:`);
-            console.log(`- Hash: ${tx.hash}`);
-            console.log(`- From: ${tx.from}`);
-            console.log(`- To: ${tx.to}`);
-            console.log(`- Value: ${(tx.value / 1e18).toFixed(4)} ETH`); // Convert from Wei to ETH
-            console.log(`- Date: ${new Date(tx.timestamp * 1000).toLocaleString()}`);
-            console.log('-----------------------------------');
-          });
-        } else {
-          console.log('No transactions found for this address.');
+        let numOfTransaction = 0;
+
+        for (let i = 0; i < data.data.length; i++) {
+          const token = data.data[i];
+          console.log(token);
+
+          if (token.from_address === address) {
+            numOfTransaction = token.nonce;
+            break;
+          }
         }
+
+        console.log(`Number of transaction: ${numOfTransaction}`);
+        console.log(`Last transaction: ${data.data[0].block_timestamp}`);
       })
       .catch(error => console.error('Error fetching transactions:', error));
   }
+
+  function getFirstTransaction(address){
+    const options = {
+        method: 'GET',
+        headers: {
+          'x-api-key': '2nZ3CN35HkCaXFfu9S4ukwVjW6t'
+        }
+      };
+
+
+      const url = 'https://api.chainbase.online/v1/account/txs?chain_id=1&address=0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7&limit=100&page=10';
+      fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if(numOfTransaction == 0){
+                console.log(`You dont have any transaction`);
+                return;
+            }
+            for (let i = numOfTransaction - 1; i >= 0; i--) {
+                const transaction = data.data[i];
+                console.log(transaction);
+                if (transaction.nonce === 0) {
+                    console.log(`First transaction imestamp: ${transaction.block_timestamp}`);
+                    break;
+                }
+            }
+        })
+        .catch(error => console.error('Error fetching transactions:', error));
+  }
   
-  function getTokenBalance(address) {
+  function getAccBalance(address) {
     const options = {
       method: 'GET',
       headers: {
@@ -45,18 +74,13 @@ function getTransactions(address) {
     fetch(url, options)
         .then(response => response.json())
         .then(data => {
-            console.log('Token Balance Data:');
-
-            let tokenNames = [];
             let totalBalance = 0;
 
             if (data && data.data && data.data.length > 0) {
             data.data.forEach((token, index) => {
-                tokenNames.push(token.name);
                 totalBalance += parseFloat(token.current_usd_price);
             });
 
-            console.log('Token Names:', tokenNames);
             console.log('Total Balance:', totalBalance);
             } else {
             console.log('No token balances found for this address.');
@@ -66,6 +90,7 @@ function getTransactions(address) {
     }
   
   const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
-  //getTransactions(address);
-  getTokenBalance(address);
+  getTransactions(address);
+  //getAccBalance(address);
+  //getFirstTransaction(address);
   

@@ -1,6 +1,5 @@
 var numOfTransaction = 0;
-var page = 1;
-
+var lastPage = 1;
 function getTransactions(address) {
     const options = {
       method: 'GET',
@@ -23,14 +22,16 @@ function getTransactions(address) {
             break;
           }
         }
-
+        lastPage = Math.floor(data.count/100) + 1;
+        getFirstTransaction(address,lastPage);
         console.log(`Number of transaction: ${numOfTransaction}`);
+        console.log(`Number of pages: ${lastPage}`);
         console.log(`Last transaction: ${lastTransaction.block_timestamp}`);
       })
       .catch(error => console.error('Error fetching transactions:', error));
   }
 
-  function getFirstTransaction(address){
+  function getFirstTransaction(address,page){
     const options = {
         method: 'GET',
         headers: {
@@ -38,17 +39,12 @@ function getTransactions(address) {
         }
       };
 
-      const url = 'https://api.chainbase.online/v1/account/txs?chain_id=1&address=0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7&limit=100&page=10';
+      const url = `https://api.chainbase.online/v1/account/txs?chain_id=1&address=${address}&limit=100&page=${page}`;
       fetch(url, options)
         .then(response => response.json())
         .then(data => {
-            if(numOfTransaction == 0){
-                console.log(`You dont have any transaction`);
-                return;
-            }
-            for (let i = numOfTransaction - 1; i >= 0; i--) {
+            for (let i = data.data.length-1; i >= 0; i--) {
                 const transaction = data.data[i];
-                console.log(transaction);
                 if (transaction.nonce === 0) {
                     console.log(`First transaction imestamp: ${transaction.block_timestamp}`);
                     break;
@@ -87,7 +83,5 @@ function getTransactions(address) {
     }
   
   const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
-  //getTransactions(address);
-  getAccBalance(address);
-  //getFirstTransaction(address);
-  
+  getTransactions(address);
+  //getAccBalance(address);  

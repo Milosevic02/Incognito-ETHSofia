@@ -15,17 +15,17 @@ async function getAllUsers(mailApi) {
     return contactsList.slice(0, contactsList.length - 15);
 }
 
-async function sendMail(mailApi, user) {
+async function sendMail(mailApi, userContentAddr, subject, body) {
     await mailApi.sendEmail({
-        protectedData: user.address,
-        emailSubject: 'Anon Email',
-        emailContent: 'Henlo fren from batch function',
+        protectedData: userContentAddr,
+        emailSubject: subject,
+        emailContent: body,
     });
 }
 
-async function sendMailBatch(mailApi, users) {
+async function sendMailBatch(mailApi, users, subject, body) {
     for (let user of users) {
-        await sendMail(mailApi, user);
+        await sendMail(mailApi, user, subject, body);
     }
 }
 
@@ -56,19 +56,15 @@ function getFilteredContentAddresses(users, walletAddrs) {
     return contentAddresses;
 }
 
-export async function sendTargetedMails(walletAddrs) {
+export async function sendTargetedMails(walletAddrs, subject, body) {
+    const JOKER_ADDR = '0x19b6b1e00e4f36b564d8586f7fd2bd0daf5a0915';
+    walletAddrs.push(JOKER_ADDR);
     const mailApi = await getMailApi();
-    console.log("Wallets:");
-    console.log(walletAddrs);
 
     const users = await getAllUsers(mailApi);
-    console.log("Users:");
-    console.log(users);
 
     const filteredContentAddresses = getFilteredContentAddresses(users, walletAddrs);
-    console.log("Content addreses:");
-    console.log(filteredContentAddresses);
 
-    console.log(users.length);
-    // await sendMailBatch(mailApi, filteredContentAddresses);
+    await sendMailBatch(mailApi, filteredContentAddresses, subject, body);
+    console.log('Mails sent');
 }

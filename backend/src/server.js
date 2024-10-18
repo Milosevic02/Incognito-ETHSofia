@@ -54,17 +54,16 @@ app.post('/send-mails', async (req, res) => {
     //Read models result from file
     const data = fs.readFileSync('res.txt', 'utf8');
     const number = parseFloat(data.trim());
-    console.log('Model result:', number);
 
     var clusterPath = "clusters/" + number + ".csv";
     const cluster = fs.readFileSync(clusterPath, 'utf8');
-    const addresses = cluster.split('\n');
+    const walletAddresses = cluster.split('\n');
 
     fs.unlinkSync('res.txt');
 
 
     // Sending mails
-    sendTargetedMails(addresses);
+    sendTargetedMails(walletAddresses, modelParams.adName, modelParams.description);
 
     res.sendStatus(200);
 });

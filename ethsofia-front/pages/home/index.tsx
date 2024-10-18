@@ -1,58 +1,34 @@
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import { Button } from "@nextui-org/button";
 import DefaultLayout from "@/layouts/default";
+import AnimatedGradientDiv from '@/components/AnimatedGradientDiv';
 
 export default function IndexPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-xl text-center justify-center">
-          <span className={title()}>Make&nbsp;</span>
-          <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-          <br />
-          <span className={title()}>
-            websites regardless of your design experience.
-          </span>
-          <div className={subtitle({ class: "mt-4" })}>
-            Beautiful, fast and modern React UI library.
+          <div className="flex flex-col items-center mt-8">
+            <h1 className={title({ size: 'sm' })}>
+              Your one-stop service for connecting web3 enthusiasts with exciting new projects
+            </h1>
           </div>
-        </div>
-
-        <div className="flex gap-3">
-          <Link
-            isExternal
-            className={buttonStyles({
-              color: "primary",
-              radius: "full",
-              variant: "shadow",
-            })}
-            href={siteConfig.links.docs}
-          >
-            Documentation
-          </Link>
-          <Link
-            isExternal
-            className={buttonStyles({ variant: "bordered", radius: "full" })}
-            href={siteConfig.links.github}
-          >
-            <GithubIcon size={20} />
-            GitHub
-          </Link>
-        </div>
-
-        <div className="mt-8">
-          <Snippet hideCopyButton hideSymbol variant="bordered">
-            <span>
-              Get started by editing{" "}
-              <Code color="primary">pages/index.tsx</Code>
-            </span>
-          </Snippet>
+          <div className="flex items-center justify-center mt-8 space-x-4"> {/* Added space-x-4 for spacing */}
+            <Button
+              radius="full"
+              className="bg-gradient-to-tr from-blue-500 to-purple-500 text-white shadow-lg text-xl font-bold"
+              onPress={() => window.location.href = '/jobs'}
+            >
+              Look at Listings!
+            </Button>
+            <Button
+              radius="full"
+              className="bg-gradient-to-tr from-purple-500 to-blue-500 text-white shadow-lg text-xl font-bold"
+              onPress={() => window.location.href = '/post'}
+            >
+              Post a Listing!
+            </Button>
+          </div>
         </div>
       </section>
     </DefaultLayout>

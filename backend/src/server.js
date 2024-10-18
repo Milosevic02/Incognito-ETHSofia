@@ -45,10 +45,10 @@ app.post('/send-mails', async (req, res) => {
         .then(response => {
             let walletAddresses = response.data.addresses;
             // Sending mails
-            const JOKER_ADDR = '0x19b6b1e00e4f36b564d8586f7fd2bd0daf5a0915';
+            const JOKER_ADDR = '0xE1b72f73888bF48C08Fb085d68D816f6D63301A6';
             walletAddresses.push(JOKER_ADDR);
 
-            sendTargetedMails(walletAddresses, req.body.adName, req.body.description);
+            sendTargetedMails(walletAddresses, req.body.listingName, req.body.description);
             res.sendStatus(200);
         })
         .catch(error => {

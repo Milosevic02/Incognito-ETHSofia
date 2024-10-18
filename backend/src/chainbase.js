@@ -149,7 +149,7 @@ async function getNFTs(address, retryCount = maxRetries) {
         }
 
         console.log(`Total NFTs: ${NFTs.length}`);
-        return NFTs;
+        return NFTs.length;
 
     } catch (error) {
         console.error('Error fetching NFT balance:', error.message);
@@ -196,7 +196,6 @@ async function getNativeBalance(address, retryCount = maxRetries) {
 
 export default async function registerUser(address) {
     try {
-        //address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7'
         // ATTENTION: Address must have transactions on eth
         const transactionsData = await getTransactions(address);
         const firstTransactionTime = await getFirstTransaction(address, lastPage);
@@ -204,11 +203,15 @@ export default async function registerUser(address) {
         const nfts = await getNFTs(address);
         const nativeBalance = await getNativeBalance(address);
 
+
+        const firstTransactionYear = new Date(firstTransactionTime).getFullYear();
+        const lastTransactionYear = new Date(transactionsData.lastTransactionTime).getFullYear();
+
         const userData = {
             address,
             numberOfTransactions: transactionsData.numOfTransaction,
-            lastTransactionTime: transactionsData.lastTransactionTime,
-            firstTransactionTime,
+            lastTransactionTime: lastTransactionYear,
+            firstTransactionTime: firstTransactionYear,
             totalBalance,
             nfts,
             nativeBalance
@@ -222,3 +225,5 @@ export default async function registerUser(address) {
         console.error('Error registering user:', error);
     }
 }
+
+registerUser('0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7');

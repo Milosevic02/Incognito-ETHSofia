@@ -78,10 +78,12 @@ export default function DocsPage() {
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center h-screen gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
-        <span className={title({ color: "violet" })}>Welcome to Icognito&nbsp;</span>
+        <span className={title({ color: "violet" })}>Welcome to Incognito&nbsp;</span>
+        <div className="inline-block max-w-lg text-center justify-center mt-8">
+          <ConnectButton/>
+        </div>
           {isConnected && (
             <form onSubmit={handleSubmit} className="flex flex-col items-center mt-8">
-              <ConnectButton/>
               <Input 
                 type="email" 
                 label="Email" 

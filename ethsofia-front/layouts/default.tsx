@@ -4,6 +4,8 @@ import { Head } from "./head";
 
 import { Navbar } from "@/components/navbar";
 
+import AnimatedGradientDiv from "@/components/AnimatedGradientDiv";
+
 export default function DefaultLayout({
   children,
 }: {
@@ -13,6 +15,7 @@ export default function DefaultLayout({
     <div className="relative flex flex-col h-screen">
       <Head />
       <Navbar />
+      <AnimatedGradientDiv />
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>

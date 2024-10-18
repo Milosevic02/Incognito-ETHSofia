@@ -34,8 +34,6 @@ app.post('/rent', async (req, res) => {
 
 app.post('/send-mails', async (req, res) => {
     var modelParams = {};
-    modelParams.adName = req.body.adName;
-    modelParams.description = req.body.description;
     modelParams.numberOfUsers = req.body.numberOfUsers;
     modelParams.walletBalance = req.body.walletBalance;
     modelParams.nativeBalance = req.body.nativeBalance;
@@ -46,25 +44,10 @@ app.post('/send-mails', async (req, res) => {
 
 
 
-    // EXECUTING MODEL USING SHELL
-
-    const paramString = `${modelParams.numberOfTransactions} ${modelParams.walletBalance} ${modelParams.nativeBalance} ${modelParams.yearOfLastTransaction} ${modelParams.yearOfFirstTransaction} ${modelParams.numberOfNFTs}`;
-    const deploySh = spawnSync('sh', ['call-model.sh', paramString], {})
-
-
-    //Read models result from file
-    const data = fs.readFileSync('res.txt', 'utf8');
-    const number = parseFloat(data.trim());
-
-    var clusterPath = "clusters/" + number + ".csv";
-    const cluster = fs.readFileSync(clusterPath, 'utf8');
-    const walletAddresses = cluster.split('\n');
-
-    fs.unlinkSync('res.txt');
 
 
     // Sending mails
-    sendTargetedMails(walletAddresses, modelParams.adName, modelParams.description);
+    sendTargetedMails(walletAddresses, req.body.adName, req.body.description);
 
     res.sendStatus(200);
 });

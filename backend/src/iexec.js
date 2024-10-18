@@ -1,6 +1,7 @@
 import { IExecWeb3mail, getWeb3Provider } from '@iexec/web3mail';
 
-const PRIVATE_KEY = process.env.MAIL_SENDER_PRIVATE_KEY;
+const PRIVATE_KEY = "3c306605592784258997c71bb00f5e3de196cf3d754fd12052d861854900c8d0";
+// const PRIVATE_KEY = process.env.MAIL_SENDER_PRIVATE_KEY;
 
 async function getMailApi() {
     const web3Provider = await getWeb3Provider(PRIVATE_KEY);

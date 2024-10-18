@@ -23,7 +23,7 @@ export default function DocsPage() {
   const { isConnected } = useAccount();
   const [email, setEmail] = useState('');
   const [protectedData, setProtectedData] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state for button loading
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -33,19 +33,16 @@ export default function DocsPage() {
       return;
     }
 
-    setIsSubmitting(true); // Set loading to true when form is submitted
+    setIsSubmitting(true);
 
     try {
-      // Protect the email data on form submission
       const protectedEmail = await dataProtectorCore.protectData({
         name: varname, data: { email: email },
       });
 
       setProtectedData(protectedEmail);
-      // Save the protected email to a global variable
       window.protectedEmail = protectedEmail;
 
-      // Grant access after protecting the email
       await dataProtectorCore.grantAccess({
         protectedData: protectedEmail.address,
         authorizedApp: WEB3MAIL_IDAPPS_WHITELIST_SC.app,
@@ -53,7 +50,6 @@ export default function DocsPage() {
         numberOfAccess: 99999,
       });
 
-      // Send the protected email address to the backend
       const response = await fetch('http://localhost:8000/retrieve-data', {
         method: 'POST',
         headers: {
@@ -67,16 +63,17 @@ export default function DocsPage() {
         console.log("Users data retrieved successfully");
         const data = await response.json();
 
-        // Convert JSON data to a string and then to a Blob object
-        const jsonData = JSON.stringify(data, null, 2); // Pretty-printed JSON
+        const jsonData = JSON.stringify(data, null, 2);
         const blob = new Blob([jsonData], { type: 'application/json' });
-    
-        // Create a file from the Blob (for example, a .json file)
+
         const file = new File([blob], 'data.json', { type: 'application/json' });
+        console.log(file.stream.toString());
+        
         await submitFile({
           file: file,
         });
 
+        
       } else {
         console.error("Failed to retrieve users data");
       }
@@ -85,7 +82,7 @@ export default function DocsPage() {
     } catch (error) {
       console.error("Error protecting email data:", error);
     } finally {
-      setIsSubmitting(false); // Reset loading state once submission is complete
+      setIsSubmitting(false);
     }
   };
 

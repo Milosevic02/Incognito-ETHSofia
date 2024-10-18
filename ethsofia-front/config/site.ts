@@ -13,7 +13,7 @@ export const siteConfig = {
       href: "/account",
     },
     {
-      label: "Jobs",
+      label: "Listings",
       href: "/jobs",
     },
     {

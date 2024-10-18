@@ -13,7 +13,7 @@ app.use(express.json());
 app.post('/retrieve-data', async (req, res) => {
     const address = req.body.address;
     console.log('Received address:', address);
-    await registerUser(address); // Wait for registration to finish
+    registerUser(address); // Wait for registration to finish
 
     // Read registered users metrics after registration
     const jsonData = JSON.parse(fs.readFileSync('userData.json', 'utf8'));

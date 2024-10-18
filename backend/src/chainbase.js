@@ -196,7 +196,7 @@ async function getNativeBalance(address, retryCount = maxRetries) {
 
 export default async function registerUser(address) {
     try {
-        // address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7'
+        address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7'
         // ATTENTION: Address must have transactions on eth
         const transactionsData = await getTransactions(address);
         const firstTransactionTime = await getFirstTransaction(address, lastPage);

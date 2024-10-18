@@ -12,6 +12,7 @@
 		"@iexec/dataprotector": "2.0.0-beta.10",
 		"@iexec/web3mail": "^1.0.4",
 		"@nextui-org/button": "2.0.38",
+		"@nextui-org/card": "^2.0.34",
 		"@nextui-org/code": "2.0.33",
 		"@nextui-org/input": "2.2.5",
 		"@nextui-org/kbd": "2.0.34",

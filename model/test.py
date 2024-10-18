@@ -1,7 +1,7 @@
 import pandas as pd
 import joblib
 
-kmeans = joblib.load('kmeans_model.pkl')
+kmeans = joblib.load('model/kmeans_model.pkl')
 
 def predict_cluster(new_data):
     new_df = pd.DataFrame([new_data], columns=['balance', 'NumberOfTransaction', 'lastTransaction', 'firstTransaction', 'NFTCount', 'NativeBalance'])
@@ -20,5 +20,5 @@ new_user = {
 
 predicted_cluster = predict_cluster(new_user)
 
-addresses_in_cluster = pd.read_csv(f'cluster_{predicted_cluster}.csv')
+addresses_in_cluster = pd.read_csv(f'model/clusters/cluster_{predicted_cluster}.csv')
 print(f"Addresses in Cluster {predicted_cluster}:\n", addresses_in_cluster)

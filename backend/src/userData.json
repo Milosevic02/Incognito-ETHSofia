@@ -1,6 +1,8 @@
 {
   "address": "0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7",
   "numberOfTransactions": 881,
+<<<<<<< HEAD
+<<<<<<<< HEAD:backend/src/userData.json
   "lastTransactionTime": "2024-10-17T14:18:59Z",
   "firstTransactionTime": "2021-03-23T18:31:47Z",
   "totalBalance": 179.79,
@@ -134,5 +136,16 @@
     "0xd07dc4262bcdbf85190c01c996b4c06a461d2430",
     "0x495f947276749ce646f68ac8c248420045cb7b5e"
   ],
+========
+=======
+>>>>>>> develop
+  "lastTransactionTime": 2024,
+  "firstTransactionTime": 2021,
+  "totalBalance": 179.45,
+  "nfts": 128,
+<<<<<<< HEAD
+>>>>>>>> develop:backend/userData.json
+=======
+>>>>>>> develop
   "nativeBalance": 0.01707095601197942
 }

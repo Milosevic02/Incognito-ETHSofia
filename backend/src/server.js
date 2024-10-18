@@ -4,6 +4,7 @@ import { rentProtectedData, sendTargetedMails } from './iexec.js';
 import cors from 'cors';
 import fs from 'fs';
 import { spawn, spawnSync } from 'child_process';
+import { axios } from 'axios';
 
 
 const app = express();

@@ -16,7 +16,12 @@ def predict():
     data = request.json  
     predicted_cluster = predict_cluster(data)
     
-    return jsonify({'cluster': int(predicted_cluster)})
+    csv_file_path = f'model/clusters/cluster_{predicted_cluster}.csv'
+    addresses_in_cluster = pd.read_csv(csv_file_path)
+    
+    addresses_list = addresses_in_cluster['address'].tolist()
+    
+    return jsonify({'cluster': int(predicted_cluster), 'addresses': addresses_list})
 
 if __name__ == '__main__':
     app.run(debug=True)

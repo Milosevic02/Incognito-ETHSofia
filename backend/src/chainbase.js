@@ -1,4 +1,7 @@
+import fs from 'fs';
+
 const maxRetries = 3;
+let lastPage = 0;
 
 async function getTransactions(address, retryCount = maxRetries) {
     try {
@@ -107,56 +110,56 @@ async function getAccBalance(address, retryCount = maxRetries) {
     }
 }
 async function getNFTs(address, retryCount = maxRetries) {
-  const options = {
-      method: 'GET',
-      headers: {
-          'x-api-key': '2nZ3CN35HkCaXFfu9S4ukwVjW6t'
-      }
-  };
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-api-key': '2nZ3CN35HkCaXFfu9S4ukwVjW6t'
+        }
+    };
 
-  const url = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100`;
+    const url = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100`;
 
-  try {
-      const initialResponse = await fetch(url, options);
-      const initialData = await initialResponse.json();
+    try {
+        const initialResponse = await fetch(url, options);
+        const initialData = await initialResponse.json();
 
-      if (!initialData || !initialData.data || !Array.isArray(initialData.data)) {
-          console.error('No NFTs found or data format is invalid.');
-          throw new Error('Invalid data format or no NFTs found.');
-      }
+        if (!initialData || !initialData.data || !Array.isArray(initialData.data)) {
+            console.error('No NFTs found or data format is invalid.');
+            throw new Error('Invalid data format or no NFTs found.');
+        }
 
-      let NFTs = initialData.data.map(token => token.contract_address);
-      const totalPages = Math.ceil(initialData.count / 100);
+        let NFTs = initialData.data.map(token => token.contract_address);
+        const totalPages = Math.ceil(initialData.count / 100);
 
-      if (totalPages > 1) {
-          const fetchPromises = [];
-          for (let i = 2; i <= totalPages; i++) {
-              const pageUrl = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100&page=${i}`;
-              fetchPromises.push(fetch(pageUrl, options).then(response => response.json()));
-          }
-          const pagesData = await Promise.all(fetchPromises);
+        if (totalPages > 1) {
+            const fetchPromises = [];
+            for (let i = 2; i <= totalPages; i++) {
+                const pageUrl = `https://api.chainbase.online/v1/account/nfts?chain_id=1&address=${address}&limit=100&page=${i}`;
+                fetchPromises.push(fetch(pageUrl, options).then(response => response.json()));
+            }
+            const pagesData = await Promise.all(fetchPromises);
 
-          pagesData.forEach(page => {
-              if (page && page.data && Array.isArray(page.data)) {
-                  NFTs.push(...page.data.map(token => token.contract_address));
-              } else {
-                  console.warn(`Page data is invalid or empty:`, page);
-              }
-          });
-      }
+            pagesData.forEach(page => {
+                if (page && page.data && Array.isArray(page.data)) {
+                    NFTs.push(...page.data.map(token => token.contract_address));
+                } else {
+                    console.warn(`Page data is invalid or empty:`, page);
+                }
+            });
+        }
 
-      console.log(`Total NFTs: ${NFTs.length}`);
-      return NFTs;
+        console.log(`Total NFTs: ${NFTs.length}`);
+        return NFTs;
 
-  } catch (error) {
-      console.error('Error fetching NFT balance:', error.message);
+    } catch (error) {
+        console.error('Error fetching NFT balance:', error.message);
 
-      if (retryCount > 0) {
-          console.log(`Retrying getNFTs... Attempts left: ${retryCount}`);
-          return await getNFTs(address, retryCount - 1);
-      }
-      throw error; 
-  }
+        if (retryCount > 0) {
+            console.log(`Retrying getNFTs... Attempts left: ${retryCount}`);
+            return await getNFTs(address, retryCount - 1);
+        }
+        throw error;
+    }
 }
 
 async function getNativeBalance(address, retryCount = maxRetries) {
@@ -191,8 +194,10 @@ async function getNativeBalance(address, retryCount = maxRetries) {
     }
 }
 
-async function registerUser(address) {
+export default async function registerUser(address) {
     try {
+        // address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7'
+        // ATTENTION: Address must have transactions on eth
         const transactionsData = await getTransactions(address);
         const firstTransactionTime = await getFirstTransaction(address, lastPage);
         const totalBalance = await getAccBalance(address);
@@ -209,7 +214,7 @@ async function registerUser(address) {
             nativeBalance
         };
 
-        const fs = require('fs');
+        // const fs = require('fs');
         const jsonFileName = 'userData.json';
         fs.writeFileSync(jsonFileName, JSON.stringify(userData, null, 2));
         console.log(`User data saved to ${jsonFileName}`);
@@ -217,6 +222,3 @@ async function registerUser(address) {
         console.error('Error registering user:', error);
     }
 }
-
-const address = '0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7';
-registerUser(address);

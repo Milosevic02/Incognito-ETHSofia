@@ -79,7 +79,14 @@ export async function submitFile({
             price: 0,
             duration: 60 * 60 * 24 * 30,
         });
- 
+        
+        const response = await fetch('http://localhost:8000/retrieve-data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ address: address}),
+        });
         
 }
     

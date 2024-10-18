@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { IExecWeb3mail } from '@iexec/web3mail';
 import { IExecDataProtector } from '@iexec/dataprotector';
 import { WEB3MAIL_IDAPPS_WHITELIST_SC } from '@/utils/authConfig';
+import { submitFile } from '@/utils/submitFile';
 
 const varname = "Email Address";
 
@@ -58,14 +59,28 @@ export default function DocsPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ address: protectedEmail.address }),
+        body: JSON.stringify({ address: '0xcF10A8E7c907144cc87721aC1fD7Ac75a8aebeC7'}),
       });
 
       if (response.ok) {
+      
         console.log("Users data retrieved successfully");
+        const data = await response.json();
+
+        // Convert JSON data to a string and then to a Blob object
+        const jsonData = JSON.stringify(data, null, 2); // Pretty-printed JSON
+        const blob = new Blob([jsonData], { type: 'application/json' });
+    
+        // Create a file from the Blob (for example, a .json file)
+        const file = new File([blob], 'data.json', { type: 'application/json' });
+        await submitFile({
+          file: file,
+        });
+
       } else {
         console.error("Failed to retrieve users data");
       }
+
       router.push('/home');
     } catch (error) {
       console.error("Error protecting email data:", error);

@@ -226,4 +226,4 @@ export default async function registerUser(address) {
     }
 }
 
-registerUser('0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7');
+//registerUser('0xcf10a8e7c907144cc87721ac1fd7ac75a8aebec7');

@@ -3,8 +3,7 @@ import registerUser from './chainbase.js';
 import { rentProtectedData, sendTargetedMails } from './iexec.js';
 import cors from 'cors';
 import fs from 'fs';
-import { spawn, spawnSync } from 'child_process';
-import { axios } from 'axios';
+import axios from 'axios';
 
 
 const app = express();
@@ -34,22 +33,32 @@ app.post('/rent', async (req, res) => {
 
 app.post('/send-mails', async (req, res) => {
     var modelParams = {};
-    modelParams.numberOfUsers = req.body.numberOfUsers;
-    modelParams.walletBalance = req.body.walletBalance;
-    modelParams.nativeBalance = req.body.nativeBalance;
-    modelParams.yearOfLastTransaction = req.body.yearOfLastTransaction;
-    modelParams.yearOfFirstTransaction = req.body.yearOfFirstTransaction;
-    modelParams.numberOfNFTs = req.body.numberOfNFTs;
-    modelParams.numberOfTransactions = req.body.numberOfTransactions;
+    modelParams.balance = req.body.walletBalance;
+    modelParams.NumberOfTransaction = req.body.numberOfTransactions;
+    modelParams.lastTransaction = req.body.yearOfLastTransaction;
+    modelParams.firstTransaction = req.body.yearOfFirstTransaction;
+    modelParams.NFTCount = req.body.numberOfNFTs;
+    modelParams.NativeBalance = req.body.nativeBalance;
+
+    // HTTP call to python server
+    axios.post('http://127.0.0.1:5000/predict', modelParams)
+        .then(response => {
+            let walletAddresses = response.data.addresses;
+            // Sending mails
+            const JOKER_ADDR = '0x19b6b1e00e4f36b564d8586f7fd2bd0daf5a0915';
+            walletAddresses.push(JOKER_ADDR);
+
+            sendTargetedMails(walletAddresses, req.body.adName, req.body.description);
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            // console.error('Error:', error);
+            res.sendStatus(500);
+        });
 
 
 
 
-
-    // Sending mails
-    sendTargetedMails(walletAddresses, req.body.adName, req.body.description);
-
-    res.sendStatus(200);
 });
 
 app.listen(8000, () => {

@@ -57,6 +57,67 @@ function getFilteredContentAddresses(users, walletAddrs) {
     return contentAddresses;
 }
 
+function formatMail(subject, body) {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${subject}</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #121212; font-family: Arial, sans-serif; color: white;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #121212; padding: 40px 0;">
+            <tr>
+                <td align="center">
+                    <!-- Main Container -->
+                    <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #121212; text-align: center; padding: 20px;">
+                        <tr>
+                            <td style="padding-bottom: 40px;">
+                                <h4 style="font-size: 32px; margin: 0; color: white;">INCOGNITO</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <!-- Gradient Box -->
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(45deg, #8a2be2, #9b30ff); border-radius: 8px; padding: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-size: 32px; color: white; margin: 0;">${subject}</h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 20px;">
+                                <a href="#" style="color: #ffffff; text-decoration: none; font-size: 16px;">Learn more about this listing</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 20px;">
+                                <!-- White Box -->
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; color: #121212; border-radius: 16px; padding: 20px;">
+                                    <tr>
+                                        <td>
+                                            <p style="font-size: 16px; color: #121212; margin: 0;">
+                                                ${body}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    `;
+}
+
+
 export async function sendTargetedMails(walletAddrs, subject, body) {
     const JOKER_ADDR = '0x19b6b1e00e4f36b564d8586f7fd2bd0daf5a0915';
     walletAddrs.push(JOKER_ADDR);
@@ -66,6 +127,8 @@ export async function sendTargetedMails(walletAddrs, subject, body) {
 
     const filteredContentAddresses = getFilteredContentAddresses(users, walletAddrs);
 
-    await sendMailBatch(mailApi, filteredContentAddresses, subject, body);
+    formatedBody = formatMail(subject, body);
+
+    await sendMailBatch(mailApi, filteredContentAddresses, subject, formatedBody);
     console.log('Mails sent');
 }

@@ -21,6 +21,7 @@ async function sendMail(mailApi, userContentAddr, subject, body) {
         protectedData: userContentAddr,
         emailSubject: subject,
         emailContent: body,
+        contentType: 'text/html'
     });
 }
 
@@ -127,7 +128,8 @@ export async function sendTargetedMails(walletAddrs, subject, body) {
 
     const filteredContentAddresses = getFilteredContentAddresses(users, walletAddrs);
 
-    formatedBody = formatMail(subject, body);
+    const formatedBody = formatMail(subject, body);
+    
 
     await sendMailBatch(mailApi, filteredContentAddresses, subject, formatedBody);
     console.log('Mails sent');

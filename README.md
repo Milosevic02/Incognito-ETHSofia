@@ -1,8 +1,10 @@
-# ETHSofia
+# ETHSofia  
 
 ## Project Details  
-This project is part of our ETHSofia initiative. Below, you will find a demo video, presentation, and all other resources needed to explore the project:  
-**Demo Video, Presentation, and Resources:** https://dorahacks.io/buidl/17725 
+This project is part of our ETHSofia initiative, where we achieved remarkable success. Our project earned **three first-place bounties** from **Chainbase**, **iExec**, and **SeeBlocks**, as well as a **third-place bounty** in the **AI Open Track competition** at the ETHSofia hackathon.  
+
+Below, you will find the demo video, presentation, and all other resources needed to explore the project:  
+**Demo Video, Presentation, and Resources:** [https://dorahacks.io/buidl/17725](https://dorahacks.io/buidl/17725)  
 
 # Project Setup Guide  
 
